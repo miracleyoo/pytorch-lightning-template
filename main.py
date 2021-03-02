@@ -10,15 +10,15 @@ from data import DInterface
 def load_callbacks():
     callbacks = []
     callbacks.append(ModelCheckpoint(
-        monitor='val_loss',
+        monitor='mpsnr',
         filename='{epoch:02d}-{val_loss:.2f}',
         save_top_k=3,
-        mode='min',
+        mode='max',
         save_last=True
     ))
 
     callbacks.append(EarlyStopping(
-        monitor='val_loss',
+        monitor='mpsnr',
         patience=10,
         min_delta=0.01
     ))
