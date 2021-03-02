@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
-from pl_bolts.callbacks import PrintTableMetricsCallback
 
 from model import MInterface
 from data import DInterface
@@ -23,7 +22,6 @@ def load_callbacks():
         min_delta=0.01
     ))
 
-    callbacks.append(PrintTableMetricsCallback())
     return callbacks
 
 

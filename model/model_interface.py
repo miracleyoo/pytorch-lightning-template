@@ -62,10 +62,8 @@ class MInterface(pl.LightningModule):
             data_range=self.hparams.color_range, 
             multi_dimension=False)
 
-        loss = self.loss_function(sr, hr)
         self.log('mpsnr', mpsnr, on_step=False, on_epoch=True, prog_bar=True)
         self.log('mssim', mssim, on_step=False, on_epoch=True, prog_bar=True)
-        return loss
 
     def test_step(self, batch, batch_idx):
         # Here we just reuse the validation_step for testing
