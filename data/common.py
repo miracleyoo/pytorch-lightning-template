@@ -1,5 +1,5 @@
 import random
-
+import cv2
 import numpy as np
 import skimage.color as sc
 import pickle as pkl
@@ -15,6 +15,13 @@ class dotdict(dict):
     __getattr__ = dict.get
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
+
+
+def even_sample(items, number):
+    """ Evenly sample `number` items from `items`.
+    """
+    indexs = (np.linspace(0, len(items)-1, number).astype(int)).tolist()
+    return itemgetter(*indexs)(items)
 
 
 def get_patch(*args, patch_size=96, scale=1, its=None):
@@ -97,18 +104,19 @@ def np2Tensor(*args, color_range=255):
     return [_np2Tensor(a) for a in args]
 
 
-def augment(*args, hflip=True, rot=True):
+def augment(*args, hflip=True, rot=True, prob=0.5):
     """ Same data augmentation for a series of input images.
         Operations included: random horizontal flip, random vertical 
         flip, random 90 degree rotation.
     Args:
         args: A list/tuple of images.
-        hflip: Whether use random horizontal flip
-        rot: Whether use random vertical flip and rotation
+        hflip: Whether use random horizontal flip.
+        rot: Whether use random vertical flip and rotation.
+        prob: The probobility of using augment.
     """
-    hflip = hflip and random.random() < 0.5
-    vflip = rot and random.random() < 0.5
-    rot90 = rot and random.random() < 0.5
+    hflip = hflip and random.random() < prob
+    vflip = rot and random.random() < prob
+    rot90 = rot and random.random() < prob
 
     def _augment(img):
         if hflip:
@@ -121,13 +129,6 @@ def augment(*args, hflip=True, rot=True):
         return img
 
     return [_augment(a) for a in args]
-
-
-def even_sample(items, number):
-    """ Evenly sample `number` items from `items`.
-    """
-    indexs = (np.linspace(0, len(items)-1, number).astype(int)).tolist()
-    return itemgetter(*indexs)(items)
 
 
 def black_square(lr, hr, prob=0.5):
@@ -153,3 +154,25 @@ def black_square(lr, hr, prob=0.5):
         hr[int(start_y*scale):int((start_y+edge)*scale),
            int(start_x * scale):int((start_x+edge)*scale), :] = 0
     return lr, hr
+
+
+def down_up(*args, scales, up_prob=1, prob=0.5):
+    """ Downscale and then upscale the input iamges.
+    Args:
+        args: A list/tuple of images.
+        scales: donw-up scale list. Like: (1.5, 2, 3, 4)
+        up_prob: Probability of applying upsample after downsample.
+        prob: Probability of applying this augment. 
+    """
+    def _down_up(img):
+        if decision:
+            img = cv2.resize(img, None, fx=1/scale, fy=1/scale, interpolation=cv2.INTER_CUBIC)#INTER_AREA
+            if up:
+                img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+        return img
+
+    decision = random.random() < prob
+    up = random.random() < up_prob
+    scale = random.choice(scales) if type(scales) in (list, tuple) else scales
+    return [_down_up(a) for a in args]
+    

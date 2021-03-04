@@ -1,3 +1,4 @@
+import random
 import os.path as op
 import numpy as np
 import pickle as pkl
@@ -11,12 +12,15 @@ class SatupData(data.Dataset):
     def __init__(self, data_dir='dataset',
                  color_range=255,
                  train=True,
-                 augment=True, **kwargs):
-        self.data_dir = data_dir
-        self.train = train
-        self.color_range = color_range
+                 no_augment=True,
+                 aug_prob=0.5,
+                 batch_size=1):
+        # Set all input args as attributes
+        self.__dict__.update(locals())
+        self.aug = train and not no_augment
+        
         self.check_files()
-        self.aug = augment and train
+        self.count = 0
 
     def check_files(self):
         middir = 'train' if self.train else 'val'
@@ -37,10 +41,17 @@ class SatupData(data.Dataset):
         hr = common.bitdepth_convert(hr, src=16, dst=8)
 
         if self.aug:
-            lr, hr = common.augment(lr, hr)
-            lr, hr = common.black_square(lr, hr)
+            lr, hr = common.augment(lr, hr, prob=self.aug_prob)
+            lr, hr = common.black_square(lr, hr, prob=self.aug_prob)
+            if self.count % self.batch_size == 0:
+                self.aug_scale = random.choice([1.5, 2, 3, 4])
+                self.aug_down_up = 1 if random.random() < self.aug_prob else 0
+            lr, hr = common.down_up(
+                lr, hr, scales=self.aug_scale, prob=self.aug_down_up, up_prob=0)
 
         lr_tensor, hr_tensor = common.np2Tensor(
             lr, hr, color_range=self.color_range)
+
+        self.count += 1
 
         return lr_tensor, hr_tensor, filename
