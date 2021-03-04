@@ -42,5 +42,8 @@ root-
 
   完事。
 
-**需要注意的是，为了实现自动加入新model和dataset而不用更改Interface，model文件夹中的模型文件名应该使用snake case命名，如`rdn_fuse.py`，而文件中的主类则要使用对应的驼峰命名法，如`RdnFuse`**。数据集data文件夹也是一样。
+**需要注意的是，为了实现自动加入新model和dataset而不用更改Interface，model文件夹中的模型文件名应该使用snake case命名，如`rdn_fuse.py`，而文件中的主类则要使用对应的驼峰命名法，如`RdnFuse`**。
+
+数据集data文件夹也是一样。
+
 虽然对命名提出了较紧的要求，但实际上并不会影响使用，反而让你的代码结构更加清晰。希望使用时候可以注意这点，以免无法parse。
