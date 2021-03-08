@@ -1,9 +1,24 @@
+# Copyright 2021 Zhongyang Zhang
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import inspect
 import torch
 import numpy as np
 import importlib
 from torch import nn
 from torch.nn import functional as F
+import torch.optim.lr_scheduler as lrs
 
 import pytorch_lightning as pl
 from .metrics import tensor_accessment
@@ -60,7 +75,21 @@ class MInterface(pl.LightningModule):
             weight_decay = 0
         optimizer = torch.optim.Adam(
             self.parameters(), lr=self.hparams.lr, weight_decay=weight_decay)
-        return optimizer
+
+        if self.hparams.lr_scheduler is None:
+            return optimizer
+        else:
+            if self.hparams.lr_scheduler == 'step':
+                scheduler = lrs.StepLR(optimizer,
+                                       step_size=self.hparams.lr_decay_steps,
+                                       gamma=self.hparams.lr_decay_rate)
+            elif self.hparams.lr_scheduler == 'cosine':
+                scheduler = lrs.CosineAnnealingLR(optimizer,
+                                       T_max=self.hparams.lr_decay_steps,
+                                       eta_min=self.hparams.lr_decay_min_lr)
+            else:
+                raise ValueError('Invalid lr_scheduler type!')
+            return [optimizer], [scheduler]
 
     def configure_loss(self):
         loss = self.hparams.loss.lower()
