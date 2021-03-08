@@ -1,8 +1,12 @@
-## Pytorch-Lightning-Template
+# Pytorch-Lightning-Template
+
+## Introduction
 
 Pytorch-Lightning 是一个很好的库，或者说是Pytorch的抽象和包装。它的好处是可复用性强，易维护，逻辑清晰等。缺点也很明显，这个包需要学习和理解的内容还是挺多的，或者换句话说，很重。如果直接按照官方的模板写代码，小型project还好，如果是大型项目，有复数个需要调试验证的模型和数据集，那就不太好办，甚至更加麻烦了。经过几天的摸索和调试，我总结出了下面这样一套好用的模板，也可以说是对Pytorch-Lightning的进一步抽象。
 
-欢迎大家尝试这一套代码风格，如果用习惯的话还是相当方便复用的，也不容易半道退坑。
+欢迎大家尝试这一套代码风格，如果用习惯的话还是相当方便复用的，也不容易半道退坑。更加详细的解释和对Pytorch-Lightning的完全攻略可以在[本篇](https://zhuanlan.zhihu.com/p/353985363)知乎博客上找到。
+
+## File Structure
 
 ```
 root-
@@ -18,8 +22,11 @@ root-
 		|-xxxmodel1.py
 		|-xxxmodel2.py
 		|-...
-	|-main.py	
+	|-main.py
+	|-utils.py
 ```
+
+## Explanation
 
 如果对每个模型直接上plmodule，对于已有项目、别人的代码等的转换将相当耗时。另外，这样的话，你需要给每个模型都加上一些相似的代码，如`training_step`，`validation_step`。显然，这并不是我们想要的，如果真的这样做，不但不易于维护，反而可能会更加杂乱。同理，如果把每个数据集类都直接转换成pl的DataModule，也会面临相似的问题。基于这样的考量，我建议使用上述架构：
 
