@@ -1,13 +1,25 @@
+# Copyright 2021 Zhongyang Zhang
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import random
 import cv2
+import torch
 import numpy as np
 import skimage.color as sc
 import pickle as pkl
 
 from operator import itemgetter
-from pathlib2 import Path
-
-import torch
 
 
 class dotdict(dict):
@@ -166,13 +178,14 @@ def down_up(*args, scales, up_prob=1, prob=0.5):
     """
     def _down_up(img):
         if decision:
-            img = cv2.resize(img, None, fx=1/scale, fy=1/scale, interpolation=cv2.INTER_CUBIC)#INTER_AREA
+            img = cv2.resize(img, None, fx=1/scale, fy=1/scale,
+                             interpolation=cv2.INTER_CUBIC)  # INTER_AREA
             if up:
-                img = cv2.resize(img, None, fx=scale, fy=scale, interpolation=cv2.INTER_CUBIC)
+                img = cv2.resize(img, None, fx=scale, fy=scale,
+                                 interpolation=cv2.INTER_CUBIC)
         return img
 
     decision = random.random() < prob
     up = random.random() < up_prob
     scale = random.choice(scales) if type(scales) in (list, tuple) else scales
     return [_down_up(a) for a in args]
-    
