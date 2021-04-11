@@ -58,10 +58,10 @@ class DInterface(pl.LightningDataModule):
         camel_name = ''.join([i.capitalize() for i in name.split('_')])
         try:
             self.data_module = getattr(importlib.import_module(
-                f'data.{name}'), camel_name)
+                '.'+name, package=__package__), camel_name)
         except:
             raise ValueError(
-                'Invalid Dataset File Name or Invalid Class Name!')
+                f'Invalid Dataset File Name or Invalid Class Name data.{name}.{camel_name}')
 
     def instancialize(self, **other_args):
         """ Instancialize a model using the corresponding parameters

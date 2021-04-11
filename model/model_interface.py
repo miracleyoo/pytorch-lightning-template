@@ -1,11 +1,11 @@
 # Copyright 2021 Zhongyang Zhang
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -85,8 +85,8 @@ class MInterface(pl.LightningModule):
                                        gamma=self.hparams.lr_decay_rate)
             elif self.hparams.lr_scheduler == 'cosine':
                 scheduler = lrs.CosineAnnealingLR(optimizer,
-                                       T_max=self.hparams.lr_decay_steps,
-                                       eta_min=self.hparams.lr_decay_min_lr)
+                                                  T_max=self.hparams.lr_decay_steps,
+                                                  eta_min=self.hparams.lr_decay_min_lr)
             else:
                 raise ValueError('Invalid lr_scheduler type!')
             return [optimizer], [scheduler]
@@ -108,9 +108,10 @@ class MInterface(pl.LightningModule):
         camel_name = ''.join([i.capitalize() for i in name.split('_')])
         try:
             Model = getattr(importlib.import_module(
-                f'model.{name}'), camel_name)
+                '.'+name, package=__package__), camel_name)
         except:
-            raise ValueError('Invalid Module File Name or Invalid Class Name!')
+            raise ValueError(
+                f'Invalid Module File Name or Invalid Class Name {name}.{camel_name}!')
         self.model = self.instancialize(Model)
 
     def instancialize(self, Model, **other_args):
