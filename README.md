@@ -1,10 +1,16 @@
 # Pytorch-Lightning-Template
 
+[**Chinese Version 中文版**](./Assets/README_CN.md)
+
 ## Introduction
 
-Pytorch-Lightning 是一个很好的库，或者说是Pytorch的抽象和包装。它的好处是可复用性强，易维护，逻辑清晰等。缺点也很明显，这个包需要学习和理解的内容还是挺多的，或者换句话说，很重。如果直接按照官方的模板写代码，小型project还好，如果是大型项目，有复数个需要调试验证的模型和数据集，那就不太好办，甚至更加麻烦了。经过几天的摸索和调试，我总结出了下面这样一套好用的模板，也可以说是对Pytorch-Lightning的进一步抽象。
+Pytorch-Lightning is a very convenient library. It can be seen as an abstraction and packaging of Pytorch. Its advantages are strong reusability, easy maintenance, clear logic, etc. The disadvantage is that it is too heavy and requires quite a bit of time to learn and understand. In addition, since it directly binds the model and the training code, it is not suitable for real projects with multiple model and dataset files. The same is true for the data module design. The strong coupling of things like DataLoader and custom Datasets also causes a similar problem: the same code is copied and pasted inelegantly here and there.
 
-欢迎大家尝试这一套代码风格，如果用习惯的话还是相当方便复用的，也不容易半道退坑。更加详细的解释和对Pytorch-Lightning的完全攻略可以在[本篇](https://zhuanlan.zhihu.com/p/353985363)知乎博客上找到。
+After much exploration and practice, I have summarized the following templates, which can also be a further abstraction of Pytorch-Lightning. In the first version, all the template content is under the root folder. However, after using it for more than a month, I found that more specified templates for different types of projects can boost coding efficiency. For example, classification and super-resolution tasks all have some fixed demand points. The project code can be implemented faster by directly modifying specialized templates, and some avoidable bugs have also been reduced. 
+
+**Currently, since this is still a new library, there are only these two templates. However, later as I apply it to other projects, new specialized templates will also be added. If you have used this template for your tasks (such as NLP, GAN, speech recognition, etc.), you are welcome to submit a PR so that you can integrate your template into the library for more people to use. If your task is not on the list yet, starting from the `classification` template is a good choice. Since most of the underlying logic and code of the templates are the same, this can be done very quickly. **
+
+Everyone is welcome to try this set of code styles. It is quite convenient to reuse if you are used to it, and it is not easy to fall back into the hole. A more detailed explanation and a complete guide to Pytorch-Lightning can be found in the [this article](https://zhuanlan.zhihu.com/p/353985363) Zhihu blog.
 
 ## File Structure
 
@@ -26,31 +32,30 @@ root-
 	|-utils.py
 ```
 
-## Explanation
+## Installation
 
-如果对每个模型直接上plmodule，对于已有项目、别人的代码等的转换将相当耗时。另外，这样的话，你需要给每个模型都加上一些相似的代码，如`training_step`，`validation_step`。显然，这并不是我们想要的，如果真的这样做，不但不易于维护，反而可能会更加杂乱。同理，如果把每个数据集类都直接转换成pl的DataModule，也会面临相似的问题。基于这样的考量，我建议使用上述架构：
+No installation is needed. Directly run `git clone https://github.com/miracleyoo/pytorch-lightning-template.git` to clone it to your local position. Choose your problem type like `classification`, and copy the corresponding template to your project directory.
 
-- 主目录下只放一个`main.py`文件。
+## Explanation of Structure
 
-- `data`和`modle`两个文件夹中放入`__init__.py`文件，做成包。这样方便导入。两个`init`文件分别是：
+- Thre are only `main.py` and `utils.py` in the root directory. The former is the entrance of the code, and the latter is a support file.
 
-  - `from .data_interface import DInterface`
-  - `from .model_interface import MInterface`
+- There is a `__init__.py` file in both `data` and `modle` folder to make them into packages. In this way, the import becomes easier.
 
 - 在`data_interface `中建立一个`class DInterface(pl.LightningDataModule):`用作所有数据集文件的接口。`__init__()`函数中import相应Dataset类，`setup()`进行实例化，并老老实实加入所需要的的`train_dataloader`, `val_dataloader`, `test_dataloader`函数。这些函数往往都是相似的，可以用几个输入args控制不同的部分。
 
 - 同理，在`model_interface `中建立`class MInterface(pl.LightningModule):`类，作为模型的中间接口。`__init__()`函数中import相应模型类，然后老老实实加入`configure_optimizers`, `training_step`, `validation_step`等函数，用一个接口类控制所有模型。不同部分使用输入参数控制。
 
-- `main.py`函数只负责：
+- `main.py` is only responsible for the following tasks:
 
-  - 定义parser，添加parse项。
-  - 选好需要的`callback`函数们。
-  - 实例化`MInterface`, `DInterface`, `Trainer`。
+  - 定义parser，添加parse项。（注意如果你的模型或数据集文件的`__init__`函数中有需要外部控制的变量，如一个`random_arg`，你可以直接在`main.py`的Parser中添加这样一项，如`parser.add_argument('--random_arg', default='test', type=str)`，两个`Interface`类会自动传导这些参数到你的模型或数据集类中。）
+  - Choose the needed `callback` functions, like auto-save, Early Stop, and LR Scheduler。
+  - Instantiate `MInterface`, `DInterface`, `Trainer`。
 
-  完事。
+Fin.
 
-**需要注意的是，为了实现自动加入新model和dataset而不用更改Interface，model文件夹中的模型文件名应该使用snake case命名，如`rdn_fuse.py`，而文件中的主类则要使用对应的驼峰命名法，如`RdnFuse`**。
+**One thing that you need to pay attention to is, in order to let the `MInterface` and `DInterface` be able to parse your newly added models and datasets automatically by simply specify the argument `--model_name` and `--dataset`, we use snake case (like `standard_net.py`) for model/dataset file, and use the same content with camel case for class name, like `StandardNet`.**
 
-数据集data文件夹也是一样。
+The same is true for `data` folder.
 
-虽然对命名提出了较紧的要求，但实际上并不会影响使用，反而让你的代码结构更加清晰。希望使用时候可以注意这点，以免无法parse。
+Although this seems restricting your naming of models and datasets, but it can also make your code easier to read and understand. Please pay attention to this point to avoid parsing issues.
