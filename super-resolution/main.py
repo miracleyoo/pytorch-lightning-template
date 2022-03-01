@@ -111,8 +111,12 @@ if __name__ == '__main__':
     parser.add_argument('--color_range', default=255, type=int)
     parser.add_argument('--aug_prob', default=0.5, type=float)
 
-    parser = Trainer.add_argparse_args(
-        parser.add_argument_group(title="pl.Trainer args"))
+    # Add pytorch lightning's args to parser as a group.
+    parser = Trainer.add_argparse_args(parser)
+
+    ## Deprecated, old version
+    # parser = Trainer.add_argparse_args(
+    #     parser.add_argument_group(title="pl.Trainer args"))
 
     # Reset Some Default Trainer Arguments' Default Values
     parser.set_defaults(max_epochs=250)
