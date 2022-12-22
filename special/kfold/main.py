@@ -64,7 +64,7 @@ def main(args):
         model = MInterface(**vars(args))
     else:
         model = MInterface(**vars(args))
-        args.resume_from_checkpoint = load_path
+        args.ckpt_path = load_path
 
     # If you want to change the logger's saving folder
     logger = TensorBoardLogger(save_dir='kfold_log', name=args.log_dir)

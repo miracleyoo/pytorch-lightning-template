@@ -62,7 +62,7 @@ def main(args):
         model = MInterface(**vars(args))
     else:
         model = MInterface(**vars(args))
-        args.resume_from_checkpoint = load_path
+        args.ckpt_path = load_path
 
     args.callbacks = load_callbacks()
     trainer = Trainer.from_argparse_args(args)
