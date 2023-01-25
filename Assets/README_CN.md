@@ -64,3 +64,29 @@ root-
 数据集data文件夹也是一样。
 
 虽然对命名提出了较紧的要求，但实际上并不会影响使用，反而让你的代码结构更加清晰。希望使用时候可以注意这点，以免无法parse。
+
+## Citation
+
+如果本模板对您的研究起到了一定的助力，请考虑引用我们的论文：
+
+```
+@misc{https://doi.org/10.48550/arxiv.2301.06648,
+  doi = {10.48550/ARXIV.2301.06648},
+  url = {https://arxiv.org/abs/2301.06648},
+  author = {Zhang, Zhongyang and Chai, Kaidong and Yu, Haowen and Majaj, Ramzi and Walsh, Francesca and Wang, Edward and Mahbub, Upal and Siegelmann, Hava and Kim, Donghyun and Rahman, Tauhidur},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV), Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title = {YeLan: Event Camera-Based 3D Human Pose Estimation for Technology-Mediated Dancing in Challenging Environments with Comprehensive Motion-to-Event Simulator},
+  publisher = {arXiv},
+  year = {2023},
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+
+@InProceedings{Zhang_2022_WACV,
+    author    = {Zhang, Zhongyang and Xu, Zhiyang and Ahmed, Zia and Salekin, Asif and Rahman, Tauhidur},
+    title     = {Hyperspectral Image Super-Resolution in Arbitrary Input-Output Band Settings},
+    booktitle = {Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) Workshops},
+    month     = {January},
+    year      = {2022},
+    pages     = {749-759}
+}
+```
