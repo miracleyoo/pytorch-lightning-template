@@ -61,3 +61,27 @@ Fin.
 The same is true for `data` folder.
 
 Although this seems restricting your naming of models and datasets, but it can also make your code easier to read and understand. Please pay attention to this point to avoid parsing issues.
+
+## Citation
+
+If you used this template and find it helpful to your research, please consider citing our paper:
+
+```
+@misc{https://doi.org/10.48550/arxiv.2301.06648,
+  doi = {10.48550/ARXIV.2301.06648},
+  
+  url = {https://arxiv.org/abs/2301.06648},
+  
+  author = {Zhang, Zhongyang and Chai, Kaidong and Yu, Haowen and Majaj, Ramzi and Walsh, Francesca and Wang, Edward and Mahbub, Upal and Siegelmann, Hava and Kim, Donghyun and Rahman, Tauhidur},
+  
+  keywords = {Computer Vision and Pattern Recognition (cs.CV), Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  
+  title = {YeLan: Event Camera-Based 3D Human Pose Estimation for Technology-Mediated Dancing in Challenging Environments with Comprehensive Motion-to-Event Simulator},
+  
+  publisher = {arXiv},
+  
+  year = {2023},
+  
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
+```
