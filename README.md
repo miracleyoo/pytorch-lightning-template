@@ -67,15 +67,17 @@ Although this seems restricting your naming of models and datasets, but it can a
 If you used this template and find it helpful to your research, please consider citing our paper:
 
 ```
-@misc{https://doi.org/10.48550/arxiv.2301.06648,
-  doi = {10.48550/ARXIV.2301.06648},
-  url = {https://arxiv.org/abs/2301.06648},
-  author = {Zhang, Zhongyang and Chai, Kaidong and Yu, Haowen and Majaj, Ramzi and Walsh, Francesca and Wang, Edward and Mahbub, Upal and Siegelmann, Hava and Kim, Donghyun and Rahman, Tauhidur},
-  keywords = {Computer Vision and Pattern Recognition (cs.CV), Artificial Intelligence (cs.AI), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  title = {YeLan: Event Camera-Based 3D Human Pose Estimation for Technology-Mediated Dancing in Challenging Environments with Comprehensive Motion-to-Event Simulator},
-  publisher = {arXiv},
-  year = {2023},
-  copyright = {arXiv.org perpetual, non-exclusive license}
+@article{ZHANG2023126388,
+title = {Neuromorphic high-frequency 3D dancing pose estimation in dynamic environment},
+journal = {Neurocomputing},
+volume = {547},
+pages = {126388},
+year = {2023},
+issn = {0925-2312},
+doi = {https://doi.org/10.1016/j.neucom.2023.126388},
+url = {https://www.sciencedirect.com/science/article/pii/S0925231223005118},
+author = {Zhongyang Zhang and Kaidong Chai and Haowen Yu and Ramzi Majaj and Francesca Walsh and Edward Wang and Upal Mahbub and Hava Siegelmann and Donghyun Kim and Tauhidur Rahman},
+keywords = {Event Camera, Dynamic Vision Sensor, Neuromorphic Camera, Simulator, Dataset, Deep Learning, Human Pose Estimation, 3D Human Pose Estimation, Technology-Mediated Dancing},
 }
 
 @InProceedings{Zhang_2022_WACV,
